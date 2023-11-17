@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  app:
+    container_name: "app"
+    image: app
+    environment:
+      - MONGODB_URL=mongodb://root:example@mongo_db/?authMechanism=DEFAULT
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo_db
+    networks:
+      - custom
+
+  mongo_db:
+    container_name: "mongo_db"
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    ports:
+      - "27017:27017"
+    networks:
+      - custom
+networks:
+  custom:
+    driver: bridge
